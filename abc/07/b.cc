@@ -17,7 +17,6 @@ int main() {
   s.second--;
   g.first--;
   g.second--;
-  vector< vector< pair<int , char> > > m = vector< vector< pair<int, char> > >(R, vector< pair<int, char> >(C));
 
   for(auto &r: m) {
     for(auto &c: r) {
