@@ -1,28 +1,36 @@
 #include <iostream>
+#include <vector>
+#include <deque>
+using namespace std;
 
-int sum(int a) {
-  int res = 0;
-  while(a  > 0) {
-    res += a % 10;
-    a /= 10;
-  }
-  return res;
-}
+struct Node {
+	struct Node * plus;
+	struct Node * mul;
+	int num;
+};
+int main() {
+	int K;
+	cin >> K;
+	vector<struct Node> N(K);
+	for(int i = 0; i < K; i++) {
+		N[i].num = i;
+		N[i].plus = &N[(i + 1) % K];
+		N[i].mul = &N[(i * 10) % K];
+	}
 
-int next(int i) {
-  int n = i++;
-  while(n % 2 == 0 || n % 5 == 0) n++;
-  return n;
-}
-
-int main(void) {
-  int a;
-  std::cin >> a;
-  int min = sum(a);
-  for(int i = 2; i < 50000000; i = next(i)) {
-    int b = sum(a * i);
-    min = min < b ? min : b;
-  }
-  std::cout << min << std::endl;
-  return 0;
+	vector<int> C(K, INT_MAX);
+	deque<pair<int , int>> d;
+	d.push_back(make_pair(1, 0));
+	while(true) {
+		auto x = d.front();
+		if(x.first == 0) {
+			cout << x.second + 1 << endl;
+			return 0;
+		}
+		d.pop_front();
+		if(C[x.first] <= x.second) continue;
+		C[x.first] = x.second;
+		d.push_back(make_pair(N[x.first].plus->num, x.second + 1));
+		d.push_front(make_pair(N[x.first].mul->num, x.second));
+	}
 }
